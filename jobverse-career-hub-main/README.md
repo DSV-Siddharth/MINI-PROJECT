@@ -1,127 +1,108 @@
-# Welcome to your Lovable project
+Job‑Verse – AI Career Hub
+Job‑Verse is a full‑stack MERN web application that helps students and job‑seekers generate ATS‑friendly resumes, analyze their strengths, and practice interviews using AI‑powered tools.
 
-## Project info
+Features
+Resume Generator – Creates tailored, ATS‑friendly resumes from user input and job descriptions using AI.
 
-**URL**: https://lovable.dev/projects/d4608848-ee05-4f90-b58c-ea03c3855286
+Resume Checker / Analyzer – Evaluates resumes for skills, keywords, structure, and gives improvement feedback.
 
-## How can I edit this code?
+Worth Estimator – Estimates expected salary range based on profile and role.​
 
-There are several ways of editing your application.
+AI English / Interview Coach – Generates domain‑specific interview questions and simulates mock interviews.​
 
-**Use Lovable**
+Dashboard UI – Modern card‑based dashboard with Job‑Verse branding and a custom favicon/logo.​
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d4608848-ee05-4f90-b58c-ea03c3855286) and start prompting.
+Tech Stack
+Frontend: React, TypeScript (for main pages), modern UI components, CSS modules.​
 
-Changes made via Lovable will be committed automatically to this repo.
+Backend: Node.js, Express.js REST APIs.
 
-**Use your preferred IDE**
+Database: MongoDB Atlas with Mongoose models (User, Resume, Analysis, InterviewSession, etc.).​
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+AI Integration: OpenRouter Polaris‑Alpha model for text generation, analysis, and interview coaching.​
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Project Structure
+jobverse-backend/ – Express server, routes, controllers, MongoDB connection, AI integration.​
 
-Follow these steps:
+jobverse-career-hub-main/ – React frontend (dashboard, ResumeGenerator, ResumeChecker, WorthEstimator, AiEnglishCoach, InterviewCoach pages).​
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+public/ – Static assets such as favicon.ico and Job‑Verse logo.​
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Getting Started
+Backend setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+cd jobverse-backend
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+npm install
 
-**Edit a file directly in GitHub**
+Create .env with MONGO_URI= and OPENROUTER_API_KEY= values.​
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+npm start (or node server.js / nodemon server.js).
 
-**Use GitHub Codespaces**
+Frontend setup
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+cd jobverse-career-hub-main
 
-## What technologies are used for this project?
+npm install
 
-This project is built with:
+npm start and open http://localhost:3000.​
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+The frontend calls backend APIs such as /api/resumes/generate, /api/analyze-resume, and /api/english-coach over HTTP (default http://localhost:5000).​
 
-## How can I deploy this project?
+ERD & DFD (High‑Level Design)
+Entities: User, Resume, Analysis, InterviewQuestions, MockInterview, Admin with 1‑to‑many relationships between User and main feature entities.
 
-Simply open [Lovable](https://lovable.dev/projects/d4608848-ee05-4f90-b58c-ea03c3855286) and click on Share -> Publish.
+Job‑Verse is a full‑stack MERN web application that helps students and job‑seekers generate ATS‑friendly resumes, analyze their strengths, and practice interviews using AI‑powered tools.
 
-## Can I connect a custom domain to my Lovable project?
+Features
+Resume Generator – Creates tailored, ATS‑friendly resumes from user input and job descriptions using AI.
 
-Yes, you can!
+Resume Checker / Analyzer – Evaluates resumes for skills, keywords, structure, and gives improvement feedback.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Worth Estimator – Estimates expected salary range based on profile and role.​
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+AI English / Interview Coach – Generates domain‑specific interview questions and simulates mock interviews.​
 
-## Backend (Supabase Edge Functions)
+Dashboard UI – Modern card‑based dashboard with Job‑Verse branding and a custom favicon/logo.​
 
-This project includes serverless Edge Functions under the `supabase/functions/` folder:
+Tech Stack
+Frontend: React, TypeScript (for main pages), modern UI components, CSS modules.​
 
-- `analyze-resume` — analyzes uploaded resumes and returns a JSON analysis (score, strengths, improvements)
-- `generate-resume` — generates a structured resume JSON from a prompt
-- `interview-coach` — chat-based interview coaching endpoint
+Backend: Node.js, Express.js REST APIs.
 
-These functions are implemented for Deno (Supabase Edge Functions) and call the Lovable AI gateway. They expect a secret named `LOVABLE_API_KEY` to be available in the environment (or configured in your Supabase project secrets).
+Database: MongoDB Atlas with Mongoose models (User, Resume, Analysis, InterviewSession, etc.).​
 
-Local setup & running functions
-1. Install the Supabase CLI: https://supabase.com/docs/guides/cli
-2. Log in and start the local environment:
+AI Integration: OpenRouter Polaris‑Alpha model for text generation, analysis, and interview coaching.​
 
-```powershell
-supabase login
-supabase init # if you haven't initialized locally
-supabase start
-```
+Project Structure
+jobverse-backend/ – Express server, routes, controllers, MongoDB connection, AI integration.​
 
-3. Set local environment variables for functions. You can copy `.env.example` to `.env` and fill values. Make sure to set `LOVABLE_API_KEY` for AI requests.
+jobverse-career-hub-main/ – React frontend (dashboard, ResumeGenerator, ResumeChecker, WorthEstimator, AiEnglishCoach, InterviewCoach pages).​
 
-4. Run functions locally (from repo root):
+public/ – Static assets such as favicon.ico and Job‑Verse logo.​
 
-```powershell
-cd supabase/functions
-supabase functions serve analyze-resume --env-file ../../.env
-```
+Getting Started
+Backend setup
 
-Repeat for `generate-resume` and `interview-coach` as needed.
+cd jobverse-backend
 
-Deploying to Supabase
+npm install
 
-1. Add the `LOVABLE_API_KEY` secret to your Supabase project: Project Settings -> API -> Environment Variables or use the CLI:
+Create .env with MONGO_URI= and OPENROUTER_API_KEY= values.​
 
-```powershell
-supabase secrets set LOVABLE_API_KEY="your-real-key"
-```
+npm start (or node server.js / nodemon server.js).
 
-2. Deploy functions:
+Frontend setup
 
-```powershell
-supabase functions deploy analyze-resume --project-ref <your-ref>
-supabase functions deploy generate-resume --project-ref <your-ref>
-supabase functions deploy interview-coach --project-ref <your-ref>
-```
+cd jobverse-career-hub-main
 
-Notes and security
-- Do NOT commit real secret keys to the repository. Use `.env` locally and Supabase secrets in production.
-- The frontend uses the Supabase JS client to invoke functions by name (see `src/pages/*`).
-- The Edge Functions in `supabase/functions/*` already include CORS headers to allow the frontend to call them.
+npm install
 
-If you'd like, I can add small helper scripts to `package.json` to make local serving and deployment easier.
+npm start and open http://localhost:3000.​
+
+The frontend calls backend APIs such as /api/resumes/generate, /api/analyze-resume, and /api/english-coach over HTTP (default http://localhost:5000).​
+
+
+
+License
+This project is for educational and portfolio purposes. Respect all third‑party API and service terms of use.​

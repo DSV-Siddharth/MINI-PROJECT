@@ -24,8 +24,8 @@ export default function ResumeChecker() {
           const typedarray = new Uint8Array(e.target?.result as ArrayBuffer);
           const text = new TextDecoder().decode(typedarray);
           const cleanText = text
-            .replace(/[^\x20-\x7E\n]/g, ' ')
-            .replace(/\s+/g, ' ')
+            .replace(/[^\x20-\x7E\n]/g, " ")
+            .replace(/\s+/g, " ")
             .trim();
           resolve(cleanText);
         } catch (error) {
@@ -38,7 +38,7 @@ export default function ResumeChecker() {
   };
 
   const processFile = async (file: File) => {
-    if (!file.type.includes('pdf') && !file.type.includes('document')) {
+    if (!file.type.includes("pdf") && !file.type.includes("document")) {
       toast({
         title: "Invalid File",
         description: "Please upload a PDF or DOCX file",
@@ -53,7 +53,7 @@ export default function ResumeChecker() {
 
     // Simulate upload progress
     progressInterval = setInterval(() => {
-      setUploadProgress(prev => {
+      setUploadProgress((prev) => {
         if (prev >= 90) {
           clearInterval(progressInterval);
           return 90;
@@ -66,7 +66,9 @@ export default function ResumeChecker() {
       const resumeText = await extractTextFromPDF(file);
 
       if (!resumeText || resumeText.length < 50) {
-        throw new Error("Could not extract enough text from the resume. Please ensure the PDF is not scanned or image-based.");
+        throw new Error(
+          "Could not extract enough text from the resume. Please ensure the PDF is not scanned or image-based."
+        );
       }
 
       setUploadProgress(95);
@@ -91,11 +93,23 @@ export default function ResumeChecker() {
         title: "Analysis Complete!",
         description: "Your resume has been analyzed",
       });
+
+      // NEW: increment "Resume Scores" stat for dashboard
+      try {
+        await fetch("http://localhost:5000/api/stats/increment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ field: "resumeScoresChecked" }),
+        });
+      } catch (err) {
+        console.error("Failed to increment resumeScoresChecked stat:", err);
+      }
     } catch (error) {
-      console.error('Error analyzing resume:', error);
+      console.error("Error analyzing resume:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to analyze resume. Please try again.",
+        description:
+          error instanceof Error ? error.message : "Failed to analyze resume. Please try again.",
         variant: "destructive",
       });
       setFileName(null);
@@ -136,14 +150,16 @@ export default function ResumeChecker() {
     setFileName(null);
     setAnalysis(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-serif text-5xl font-semibold tracking-luxury text-foreground">Resume Checker</h1>
+        <h1 className="font-serif text-5xl font-semibold tracking-luxury text-foreground">
+          Resume Checker
+        </h1>
         <p className="mt-3 text-lg text-muted-foreground">
           Upload your resume and get instant feedback
         </p>
@@ -152,25 +168,29 @@ export default function ResumeChecker() {
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="border-border bg-gradient-card shadow-lg">
           <CardHeader>
-            <CardTitle className="font-serif text-2xl font-semibold tracking-luxury text-foreground">Upload Resume</CardTitle>
+            <CardTitle className="font-serif text-2xl font-semibold tracking-luxury text-foreground">
+              Upload Resume
+            </CardTitle>
             <CardDescription>Upload your resume in PDF or DOCX format</CardDescription>
           </CardHeader>
           <CardContent>
-            <div 
+            <div
               className={`flex flex-col items-center justify-center rounded-lg border-2 border-dashed bg-card p-12 text-center transition-all ${
-                isDragging 
-                  ? 'border-accent bg-accent/5 scale-105' 
-                  : 'border-border hover:border-accent'
+                isDragging ? "border-accent bg-accent/5 scale-105" : "border-border hover:border-accent"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <Upload className={`h-12 w-12 mb-4 transition-colors ${isDragging ? 'text-accent' : 'text-muted-foreground'}`} />
+              <Upload
+                className={`h-12 w-12 mb-4 transition-colors ${
+                  isDragging ? "text-accent" : "text-muted-foreground"
+                }`}
+              />
               <p className="text-sm text-muted-foreground mb-4">
-                {isDragging ? 'Drop your resume here' : 'Click to upload or drag and drop'}
+                {isDragging ? "Drop your resume here" : "Click to upload or drag and drop"}
               </p>
-              
+
               {fileName && !isAnalyzing && (
                 <div className="mb-4 flex items-center gap-2 text-sm text-foreground bg-muted px-3 py-2 rounded-md">
                   <FileText className="h-4 w-4" />
@@ -180,14 +200,14 @@ export default function ResumeChecker() {
                   </button>
                 </div>
               )}
-              
+
               {isAnalyzing && (
                 <div className="w-full max-w-xs mb-4 space-y-2">
                   <Progress value={uploadProgress} className="h-2" />
                   <p className="text-xs text-muted-foreground">Analyzing your resume...</p>
                 </div>
               )}
-              
+
               <input
                 ref={fileInputRef}
                 type="file"
@@ -198,7 +218,7 @@ export default function ResumeChecker() {
                 disabled={isAnalyzing}
               />
               <label htmlFor="resume-upload">
-                <Button 
+                <Button
                   asChild
                   disabled={isAnalyzing}
                   className="bg-gradient-accent text-accent-foreground shadow-glow-accent hover:opacity-90 font-semibold"
@@ -214,7 +234,9 @@ export default function ResumeChecker() {
 
         <Card className="border-border bg-gradient-card shadow-lg">
           <CardHeader>
-            <CardTitle className="font-serif text-2xl font-semibold tracking-luxury text-foreground">Analysis Results</CardTitle>
+            <CardTitle className="font-serif text-2xl font-semibold tracking-luxury text-foreground">
+              Analysis Results
+            </CardTitle>
             <CardDescription>Your resume analysis will appear here</CardDescription>
           </CardHeader>
           <CardContent>
@@ -222,7 +244,9 @@ export default function ResumeChecker() {
               <div className="space-y-6 animate-in fade-in-50 duration-500">
                 <div className="text-center">
                   <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-accent shadow-glow-accent mb-4 animate-in zoom-in-50 duration-500">
-                    <span className="text-3xl font-bold text-accent-foreground">{analysis.score}</span>
+                    <span className="text-3xl font-bold text-accent-foreground">
+                      {analysis.score}
+                    </span>
                   </div>
                   <p className="text-sm text-muted-foreground">Overall Score</p>
                 </div>
@@ -233,12 +257,15 @@ export default function ResumeChecker() {
                   </h3>
                   <ul className="space-y-2">
                     {analysis.strengths.map((strength: string, index: number) => (
-                      <li 
-                        key={index} 
+                      <li
+                        key={index}
                         className="flex items-start gap-2 animate-in slide-in-from-left-2 duration-300"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
-                        <Badge variant="outline" className="mt-0.5 bg-success/10 text-success border-success/20">
+                        <Badge
+                          variant="outline"
+                          className="mt-0.5 bg-success/10 text-success border-success/20"
+                        >
                           ✓
                         </Badge>
                         <span className="text-sm text-foreground">{strength}</span>
@@ -253,12 +280,15 @@ export default function ResumeChecker() {
                   </h3>
                   <ul className="space-y-2">
                     {analysis.improvements.map((improvement: string, index: number) => (
-                      <li 
-                        key={index} 
+                      <li
+                        key={index}
                         className="flex items-start gap-2 animate-in slide-in-from-left-2 duration-300"
                         style={{ animationDelay: `${index * 100}ms` }}
                       >
-                        <Badge variant="outline" className="mt-0.5 bg-warning/10 text-warning border-warning/20">
+                        <Badge
+                          variant="outline"
+                          className="mt-0.5 bg-warning/10 text-warning border-warning/20"
+                        >
                           !
                         </Badge>
                         <span className="text-sm text-foreground">{improvement}</span>
